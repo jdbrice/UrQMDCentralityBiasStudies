@@ -146,6 +146,9 @@ void UrQMD::Loop()
 		}
 
 		int refmult = 0;
+		int refmultPi = 0;
+		int refmultP = 0;
+		int refmultK = 0;
 		float Ncoll = ncoll_for_b( b );
 
 		for (Int_t it = 0; it < Tracks_; it++ ){
@@ -157,17 +160,20 @@ void UrQMD::Loop()
 				}
 
 				if ( (8==gid || 9==gid) && Tracks_mPt[it] > 0.15 && fabs(Tracks_mEta[it]) < 0.5){
+					refmultPi ++;
 					if ( Tracks_mPt[it] > pT_leading_pion )
 						pT_leading_pion = Tracks_mPt[it];
 				}
 				if ( (11==gid || 12==gid) && Tracks_mPt[it] > 0.15 && fabs(Tracks_mEta[it]) < 0.5){
-					if ( Tracks_mPt[it] > pT_leading_proton )
-						pT_leading_proton = Tracks_mPt[it];
+					refmultK ++;
+					if ( Tracks_mPt[it] > pT_leading_kaon )
+						pT_leading_kaon = Tracks_mPt[it];
 				}
 
 				if ( (14==gid || 15==gid) && Tracks_mPt[it] > 0.15 && fabs(Tracks_mEta[it]) < 0.5){
-					if ( Tracks_mPt[it] > pT_leading_kaon )
-						pT_leading_kaon = Tracks_mPt[it];
+					refmultP ++;
+					if ( Tracks_mPt[it] > pT_leading_proton )
+						pT_leading_proton = Tracks_mPt[it];
 				}
 			}
 		}
@@ -180,16 +186,16 @@ void UrQMD::Loop()
 				if ( refmult > cbins[i].first && refmult <= cbins[i].second ){
 					if ( (8==gid || 9==gid) && Tracks_mPt[it] > 0.15 && fabs(Tracks_mEta[it]) < 0.5){
 						hpitbias[i]->Fill( Tracks_mPt[it], b / mean_b[i] );
-						hpitbiasnc[i]->Fill( Tracks_mPt[it], Ncoll / mean_nc[i] );
+						hpitbiasnc[i]->Fill( Tracks_mPt[it], Ncoll / mean_nc[i], 1.0 / ((float)refmultPi) );
 					}
 					if ( (11==gid || 12==gid) && Tracks_mPt[it] > 0.15 && fabs(Tracks_mEta[it]) < 0.5){
-						hptbias[i]->Fill( Tracks_mPt[it], b / mean_b[i] );
-						hptbiasnc[i]->Fill( Tracks_mPt[it], Ncoll / mean_nc[i] );
+						hktbias[i]->Fill( Tracks_mPt[it], b / mean_b[i] );
+						hktbiasnc[i]->Fill( Tracks_mPt[it], Ncoll / mean_nc[i] );
 					}
 
 					if ( (14==gid || 15==gid) && Tracks_mPt[it] > 0.15 && fabs(Tracks_mEta[it]) < 0.5){
-						hktbias[i]->Fill( Tracks_mPt[it], b / mean_b[i] );
-						hktbiasnc[i]->Fill( Tracks_mPt[it], Ncoll / mean_nc[i] );
+						hptbias[i]->Fill( Tracks_mPt[it], b / mean_b[i] );
+						hptbiasnc[i]->Fill( Tracks_mPt[it], Ncoll / mean_nc[i] );
 					}
 
 				} // check centrality bin

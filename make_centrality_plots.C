@@ -38,7 +38,7 @@ void make_centrality_plots( TString plc = "pi" ){
 	TGraphErrors * b_vs_cbin = new TGraphErrors( n, x, y, ex, ey );
 
 	b_vs_cbin_frame->Draw();
-	b_vs_cbin_frame->GetYaxis()->SetRangeUser( 0.7, 1.3 );
+	b_vs_cbin_frame->GetYaxis()->SetRangeUser( 0.9, 1.1 );
 
 	b_vs_cbin->SetMarkerStyle(8);
 	b_vs_cbin->SetMarkerSize(2);
